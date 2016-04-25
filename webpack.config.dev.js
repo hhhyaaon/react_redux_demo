@@ -10,7 +10,7 @@ module.exports = {
     'app': [
       'eventsource-polyfill', // necessary for hot reloading with IE
       'webpack-hot-middleware/client',
-      './index.js']
+      './src/index.js']
   },
   output: {
     path: path.join(__dirname, './dist/static'),
@@ -20,7 +20,7 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx', '.css', '.scss'],
     alias: {
-      'SRC': __dirname + '/src'
+      'src': __dirname + '/src'
     }
   },
   module: {

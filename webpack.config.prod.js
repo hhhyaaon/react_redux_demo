@@ -6,7 +6,7 @@ var webpack = require("webpack");
 module.exports = {
   devtool: "source-map",
   entry: {
-    "app": "./index.js"
+    "app": "./src/index.js"
   },
   output: {
     path: path.resolve("./dist/static"),
@@ -16,7 +16,7 @@ module.exports = {
   resolve: {
     extensions: ["", ".js", ".jsx", ".css", ".scss"],
     alias: {
-      "SRC": __dirname + "/src"
+      "src": __dirname + "/src"
     }
   },
   module: {

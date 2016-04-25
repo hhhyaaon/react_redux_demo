@@ -16,4 +16,4 @@ class Layout extends Component {
   }
 }
 
-export default connect(null)(Base)
+export default connect(null)(Layout)
