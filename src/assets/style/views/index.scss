@@ -1,0 +1,79 @@
+ @import "./_SASSLIB.scss";
+
+#sy{
+	position: relative;
+	border-top:3px solid $theme_dark_green;
+	width: 100%;
+	min-height: 100%;
+}
+
+#sy-menuwrap{
+
+	position: absolute;
+	width: 230px;
+	min-height: 100%;
+	background-color: white;
+	z-index:1;
+	left:-231px;
+
+	.sy-logo{
+		background-color: $shadow_gray;
+    	text-align: center;
+    	height: 60px;
+    	line-height: 60px;
+    	border-bottom: $border_gray;
+	}
+	.sy-logo h2{
+		display: inline-block;
+		font-weight: normal;
+	}
+	.sy-logo h2:after{
+		content: "Beta";
+    	background-color: $font_gray;
+    	color: white;
+    	margin-left: 10px;
+    	font-size: xx-small;
+    	padding: 2px;
+	}
+	
+	.ant-menu-inline{
+		border-right:none;
+	}
+}
+
+
+#sy-ctnwrap{
+	position: absolute;
+	border-left: 231px solid $border_gray;
+	min-height: 100%;
+	width:100%;
+
+	#sy-header{
+		height: 60px;
+		line-height: 60px;
+		border-bottom: 1px solid $border_gray;
+	}
+
+	#sy-ctn{
+		padding:25px 30px;
+	}
+}
+
+.sy-loadingwrap{
+	position: fixed;
+    z-index: 5;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin-left: 50%;
+    right: 0;
+    margin: auto;
+    background-color: white;
+    opacity: 0.5;
+	
+    .ant-spin-spining{
+    	position: absolute;
+    	top: 50%;
+    	left: 50%;
+    }
+}
