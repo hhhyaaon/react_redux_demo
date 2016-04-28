@@ -3,23 +3,31 @@ import ReactDOM from "react-dom"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import {Link} from "react-router"
+import Immutable from "immutable"
 import Button from "antd/lib/button"
+import Menu from "../components/menu"
+import * as Actions from "../actions/layout.js"
 
-import store from "../store"
-import * as action from "../actions/layout.js"
 
-import "../assets/style/views/index.scss"
+import "../assets/style/views/index.less"
+
+const menuItemUrl = {
+  "2-1": "/product/list",
+  "2-2": "/product/detail"
+}
 
 
 class Layout extends React.Component {
   constructor(props) {
-    console.log("props", props);
     super(props);
   }
   componentDidMount() {
-
+    let {actions} = this.props;
+    actions.getMenu();
   }
   render() {
+    let menus = this.props.$$layout.get("$$menus", Immutable.List()).toJS();
+
     return (
       <div>
         <div id="sy-ctnwrap">
@@ -28,7 +36,11 @@ class Layout extends React.Component {
               <h2>Synapse</h2>
             </div>
             <div id="sy-menu">
-              <_Menu/>
+              <Menu
+                dataSource={ menus }
+                dataValueField="id"
+                dataTextField="name"
+                onClick={this.onClick.bind(this) }></Menu>
             </div>
           </div>
 
@@ -42,38 +54,24 @@ class Layout extends React.Component {
       </div>
     )
   }
+  onClick(item) {
+    this.props.history.push({
+      pathname: menuItemUrl[item.key]
+    })
+  }
 }
 
-class _Menu extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <Button
-        type="primary"
-        onClick = {this.click}
-        >测试</Button>
-    )
-  }
-  click() {
-    console.log("views", action);
-    //action.click("cccc");
-    store.dispatch(action.click("xxxx"))
-  }
-}
+
 
 
 export default connect(
   (state) => {
-    console.warn("state",state);
     return {
-      menus: state.menus
+      $$layout: state.$$layout
     }
   },
   (dispatch) => {
-    console.warn("dispatch",dispatch);
     return {
-      actionxx: bindActionCreators(action, dispatch)
+      actions: bindActionCreators(Actions, dispatch)
     }
   })(Layout)

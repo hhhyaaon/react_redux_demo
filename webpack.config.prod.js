@@ -56,9 +56,12 @@ module.exports = {
         loader: "url-loader?mimetype=image/png"
       },
       {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-        // loader: "style!css?sourceMap!autoprefixer-loader",
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract("style","css-loader!less-loader"),
+        include: [
+          path.join(__dirname, "src/assets/style"),
+          path.join(__dirname,"node_modules/antd")
+        ]
       },
       {
         test: /\.css$/,

@@ -66,11 +66,6 @@ module.exports = {
         include: path.join(__dirname, "src")
       },
       {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract("style","css-loader!sass-loader"),
-        include: path.join(__dirname, "src/assets/style")
-      },
-      {
         test: /\.less$/,
         loader: ExtractTextPlugin.extract("style","css-loader!less-loader"),
         include: [
@@ -106,3 +101,4 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ]
 };
+
