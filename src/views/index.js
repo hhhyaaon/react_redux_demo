@@ -1,3 +1,5 @@
 export Layout from "./layout"
 export Home from "./common/home"
 export ProductList from "./product/list"
+export ProductDetail from "./product/detail"
+export ProductEdit from "./product/edit"

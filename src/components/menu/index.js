@@ -3,6 +3,8 @@ import React from "react"
 import ReactDOM from "react-dom"
 import _Menu from "antd/lib/menu"
 import _Icon from "antd/lib/icon"
+import "whatwg-fetch"
+import "es6-promise"
 
 
 export default class Menu extends React.Component {

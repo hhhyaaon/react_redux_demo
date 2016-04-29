@@ -16,8 +16,9 @@
   "dependencies": {
     "antd": "^0.12.4",
     "classnames": "^2.2.3",
+    "es6-promise": "^3.1.2",
     "immutable": "^3.7.6",
-    "isomorphic-fetch": "^2.2.0",
+    "jquery": "^2.2.3",
     "lodash": "^3.10.1",
     "react": "~0.14.x",
     "react-addons-update": "^0.14.3",
@@ -29,7 +30,8 @@
     "react-router-redux": "^4.0.4",
     "redux": "^3.0.4",
     "redux-thunk": "^1.0.3",
-    "webpack": "^1.12.14"
+    "webpack": "^1.12.14",
+    "whatwg-fetch": "^1.0.0"
   },
   "main": "lib/index.js",
   "devDependencies": {

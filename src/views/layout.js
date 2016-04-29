@@ -26,7 +26,7 @@ class Layout extends React.Component {
     actions.getMenu();
   }
   render() {
-    let menus = this.props.$$layout.get("$$menus", Immutable.List()).toJS();
+    let menus = this.props.$$layout.toJS().menus;
 
     return (
       <div>

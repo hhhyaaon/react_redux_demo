@@ -10,9 +10,15 @@ import "./assets/style/antd/antd.less"
 
 import configureStore from "./store"
 
-import {Layout, Home, ProductList} from "./views"
+import {
+  Layout, 
+  Home, 
+  ProductList,
+  ProductDetail,
+  ProductEdit} from "./views"
 
 const store = configureStore();
+
 // const history = syncHistoryWithStore(browserHistory, store);
 
 class Root extends React.Component {
@@ -32,18 +38,18 @@ class Root extends React.Component {
               <Route path="product">
                 <IndexRoute component={ProductList}/>
                 <Route path="list" component={ProductList}/>
-                <Route path="detail" component={ProductList}/>
-                <Route path="edit" component={ProductList}/>
+                <Route path="detail" component={ProductDetail}/>
+                <Route path="edit" component={ProductEdit}/>
               </Route>
             </Route>
           </Router>
-          { (process.env.NODE_ENV === "production") ? null : <DevTools /> }
+        
         </div>
       </Provider>
     )
   }
 }
-
+//  { (process.env.NODE_ENV === "production") ? null : <DevTools /> }
 ReactDOM.render(
   <Root />,
   document.getElementById("sy")
