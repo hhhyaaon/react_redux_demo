@@ -56,7 +56,10 @@ class Layout extends React.Component {
   }
   onClick(item) {
     this.props.history.push({
-      pathname: menuItemUrl[item.key]
+      pathname: menuItemUrl[item.key],
+      query:{
+        //_:Math.random().toString().replace("0.","")
+      }
     })
   }
 }

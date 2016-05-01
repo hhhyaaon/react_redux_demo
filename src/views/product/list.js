@@ -1,5 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import {Link} from "react-router"
 import {connect} from "react-redux"
 import { bindActionCreators } from "redux"
 import SearchBar from "../../components/searchBar"
@@ -19,7 +20,7 @@ class ProductList extends React.Component {
     constructor(props) {
         super(props);
     }
-    componentDidMount(){
+    componentDidMount() {
         let {actions} = this.props;
         actions.getProductList();
     }
@@ -34,8 +35,7 @@ class ProductList extends React.Component {
                     dataIndex: "name",
                     key: "name",
                     render: (text, r) => {
-                        return (<a
-                            onClick={function () { Syp.router.gotoUrl(url.ProductDetail, { id: r.id }); } }>{text}</a>);// todo 
+                        return (<Link to="/product/detail">{text}</Link>);
                     }
                 }, {
                     title: "通用名",
@@ -46,7 +46,7 @@ class ProductList extends React.Component {
                     dataIndex: "createTime",
                     key: "createTime",
                     render: (val) => {
-                        return new Date(val).toString();
+                        return new Date(val).format("yyyy-MM-dd");
                     },
                     sorter: true
                 }, {
@@ -96,7 +96,7 @@ class ProductList extends React.Component {
                     </Col>
                     <Col span="6">
                         <SearchBar
-                            onSearch={this.onClickSearch.bind(this)}></SearchBar>
+                            onSearch={this.onClickSearch.bind(this) }></SearchBar>
                     </Col>
                 </Row>
 

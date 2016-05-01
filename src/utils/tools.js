@@ -3,9 +3,10 @@ import ReactDOM from "react-dom"
 import Spin from "antd/lib/spin"
 import Modal from "antd/lib/modal"
 import $ from "jquery"
+import core from "./core.js"
 
 
-const utils = {
+const tools = {
     /**
 	 * 列表页每页显示条数
 	 * @type {Number}
@@ -73,8 +74,6 @@ const utils = {
             confirm: { title: "确认" }
         };
         let returnModal = {};
-
-
         $.map(mode, function (val, key) {
             returnModal[key] = function (content, okCb, cfg) {
                 Modal[key]($.extend(true, {
@@ -101,7 +100,7 @@ const utils = {
 
 };
 
-$.extend(true, utils, {
+$.extend(true, tools, {
     /**
      * 封装ajax：
      *【调用方法】: MainPage.ajax({});
@@ -117,102 +116,101 @@ $.extend(true, utils, {
      * isSuccessShow ：当操作成功时，是否显示success提示框，默认为false
      */
     ajax: (function () {
-        let _cfg = {};
-        let _this = utils;
-        function mpAjax(cfg) {
-            _cfg = $.extend(true, {
+        function _ajax(cfg) {
+            let _cfg = $.extend(true, {}, {
                 url: "",
                 dispatch: null,
-                actionType:"",
+                actionType: "",
                 type: "get",
                 dataType: "json",
-                result: mpAjax.resultEnum.array,
+                result: _ajax.resultEnum.object,
                 info: "",
-                isShowSuccess: false
+                isShowSuccess: false,
+                success: $.noop
             }, cfg);
-            //注册请求前事件
-            _cfg.beforeSend = function () {
-                _this.showLoading();
-                if (typeof cfg.beforeSend === "function") {
-                    cfg.beforeSend.apply(this, Array.prototype.slice.call(arguments));
-                }
-            }
 
-            //注册请求失败事件
-            _cfg.error = function (xhr, e) {
-                _this.hideLoading(); // todo
-                _triggerError(xhr.statusText);
-                if (typeof cfg.error === "function") {
-                    cfg.error.apply(this, Array.prototype.slice.call(arguments));
-                }
-            }
+            _cfg.beforeSend = function () { _beforeSend.apply(this, $.makeArray(arguments).concat(cfg)); }
+            _cfg.success = function () { _onSuccess.apply(this, $.makeArray(arguments).concat(cfg)); };
+            _cfg.error = function () { _onError.apply(this, $.makeArray(arguments).concat(cfg)); };
 
-            //注册响应成功事件
-            _cfg.success = function (res) {
-                //-----------删除
-                res.code = 10000;
-                //------------
-                
-                var isTriggerSuccess = false;
-                _this.hideLoading();
-                if (res.code === 10000) {
-                    //成功
-                    if (_cfg.result === mpAjax.resultEnum.array) {
-                        isTriggerSuccess = res.data instanceof Array;
-                    } else if (_cfg.result === mpAjax.resultEnum.bool) {
-                        isTriggerSuccess = res.data === true;
-                    } else if (_cfg.result === mpAjax.resultEnum.guid) {
-                        isTriggerSuccess = typeof res.data === "string";
-                    } else if (_cfg.result === mpAjax.resultEnum.normal) {
-                        
-                        isTriggerSuccess = $.isPlainObject(res.data) === true;
-                    } else {
-                        isTriggerSuccess = false;
-                    }
+            //执行ajax
+            $.ajax(_cfg);
+
+        }
+
+        function _beforeSend(xhr, opt, userOpt) {
+            tools.showLoading();
+            if (typeof userOpt.beforeSend === "function") {
+                userOpt.beforeSend.apply(this, $.makeArray(arguments));
+            }
+        }
+
+        function _onSuccess(resp, state, xhr, userOpt) {
+            let isTriggerSuccess = false;
+            let opt = this;
+
+            //------------
+            resp.code = 10000;
+            //---------------
+
+            if (resp.code === 10000) {
+                //服务器返回成功
+                if (opt.result === _ajax.resultEnum.object && $.isPlainObject(resp.data)) {
+                    isTriggerSuccess = true;
+                } else if (opt.result === _ajax.resultEnum.array && resp.data instanceof Array) {
+                    isTriggerSuccess = true;
+                } else if (opt.result === _ajax.resultEnum.array.bool && resp.data === true) {
+                    isTriggerSuccess = true;
+                } else if (opt.result === _ajax.resultEnum.guid && typeof resp.data === "string") {
+                    isTriggerSuccess = true;
+                } else if (opt.result === _ajax.resultEnum.html && typeof resp.data === "string") {
+                    isTriggerSuccess = true;
                 } else {
-                    //失败
-                    isTriggerSuccess = false;
-                }
-                isTriggerSuccess ? _triggerSuccess.call(this, res) : _triggerError(res.msg);
-            }
 
-            function _triggerError(mes) {
-               
-                
-                _this.showDialog.error(_cfg.info + "操作失败，信息：" + (mes || "无"));
-                _cfg.dispatch({
+                    tools.showDialog.error("校验服务器成功返回值异常");
+                }
+            } else if (resp.code === 10001) {
+                //服务器返回失败
+                isTriggerSuccess = false;
+            } else {
+                tools.showDialog.error("response code异常");
+            }
+            isTriggerSuccess === true ? triggerSuccess.apply(this, $.makeArray(arguments)) : triggerError.apply(this, $.makeArray(arguments));
+        }
+
+        function _onError(xhr, state, msg, userOpt) {
+            triggerError.call(this, null, state, xhr, userOpt);
+        }
+
+
+        function triggerSuccess(resp, state, xhr) {
+            let opt = this;
+            tools.hideLoading();
+            opt.dispatch({
+                type: opt.actionType,
+                data: resp.data
+            });
+        }
+
+        function triggerError(resp, state, xhr) {
+            let opt = this;
+            let msg = (resp == null ? "网络请求失败" : resp.msg) || "无";
+            tools.showDialog.error(opt.info + "失败，信息：" + msg, function () {
+                opt.dispatch({
                     type: ""
                 });
-                _cfg.dispatch = null;
-            }
-
-            function _triggerSuccess(res) {
-                 console.log(_cfg);
-                if (_cfg.isShowSuccess === true) {
-                    _this.showDialog.success(_cfg.info + "操作成功", function () {
-                        _cfg.dispatch({
-                            type: _cfg.actionType,
-                            data: res.data
-                        })
-                    });
-                } else {
-                    _cfg.dispatch({
-                        type: _cfg.actionType,
-                        data: res.data
-                    })
-                }
-            }
-            return $.ajax(_cfg);
+            });
         }
-        mpAjax.resultEnum = {
-            normal: 0,
+
+        _ajax.resultEnum = {
+            object: 0,
             array: 1,
             bool: 2,
             guid: 3,
             html: 4
         }
-        return mpAjax;
+        return _ajax;
     } ())
 })
 
-export default utils;
+export default tools;
