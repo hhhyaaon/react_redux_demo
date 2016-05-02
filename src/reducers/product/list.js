@@ -1,10 +1,14 @@
 import Immutable from "immutable"
-import {GET_PRODUCT_LIST} from "../../constants/actionType.js"
+import {
+    GET_PRODUCT_LIST,
+    GET_CHECKED_PRODUCTS,
+    DELETE_PRODUCTS} from "../../constants/actionType.js"
 
 let initState = Immutable.Map({
     keyword: "",
     filter: {},
-    products: {data:[]}
+    products: { data: [] },
+    checkedPdts: []
 });
 
 const pdts = Immutable.Map({
@@ -92,10 +96,14 @@ const pdts = Immutable.Map({
 });
 
 export default function productList(state = initState, action) {
-    
+
     switch (action.type) {
         case GET_PRODUCT_LIST:
             return _getProductList(state, Immutable.fromJS(action.data));
+        case GET_CHECKED_PRODUCTS:
+            return _getCheckedProducts(state, Immutable.fromJS(action.data));
+        case GET_CHECKED_PRODUCTS:
+            return _deleteProducts(state);
         default:
             return state
     }
@@ -106,4 +114,12 @@ function _getProductList(state, value) {
     value = pdts;// todo
     //--------
     return state.set("products", value);
+}
+
+function _getCheckedProducts(state, value) {
+    return state.set("checkedPdts", value);
+}
+
+function _deleteProducts(state) {
+    return state;
 }

@@ -11,7 +11,7 @@ const tools = {
 	 * 列表页每页显示条数
 	 * @type {Number}
 	 */
-    listPageSize: 8,
+    listPageSize: 10,
     /**
     * 当前loading数
     * @type {Number}
@@ -102,6 +102,26 @@ const tools = {
 
 $.extend(true, tools, {
     /**
+	 * antd 组件config
+	 * @type {Object}
+	 */
+    config: {
+		/**
+		 * 分页插件config
+		 * @type {Object}
+		 */
+        pagination: {
+            size: "small",
+            total: 0,
+            pageSizeOptions: ['5', '10', '15', '20'],
+            current:1,
+            pageSize: tools.listPageSize,
+            showSizeChanger: true,
+            showQuickJumper: true,
+            onChange: $.noop
+        }
+    },
+    /**
      * 封装ajax：
      *【调用方法】: MainPage.ajax({});
      *【配置参数】：
@@ -180,16 +200,32 @@ $.extend(true, tools, {
 
         function _onError(xhr, state, msg, userOpt) {
             triggerError.call(this, null, state, xhr, userOpt);
+            if (typeof userOpt.error === "function") {
+                userOpt.error.call(this, xhr, state, msg);
+            }
         }
 
 
-        function triggerSuccess(resp, state, xhr) {
+        function triggerSuccess(resp, state, xhr, userOpt) {
             let opt = this;
             tools.hideLoading();
-            opt.dispatch({
-                type: opt.actionType,
-                data: resp.data
-            });
+            if (opt.isShowSuccess === true) {
+                tools.showDialog.success(opt.info + "成功", function () {
+                    triggerUserSuccess.apply(opt, $.makeArray(arguments));
+                });
+            } else {
+                triggerUserSuccess.apply(opt, $.makeArray(arguments));
+            }
+
+            function triggerUserSuccess(resp, state, xhr, userOpt) {
+                opt.dispatch({
+                    type: opt.actionType,
+                    data: resp.data
+                });
+                if (typeof userOpt.success === "function") {
+                    userOpt.success.call(opt, resp, state, xhr);
+                }
+            }
         }
 
         function triggerError(resp, state, xhr) {
@@ -199,6 +235,7 @@ $.extend(true, tools, {
                 opt.dispatch({
                     type: ""
                 });
+
             });
         }
 
