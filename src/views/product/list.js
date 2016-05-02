@@ -1,3 +1,5 @@
+import Immutable from "immutable"
+import $ from "jquery"
 import React from "react"
 import ReactDOM from "react-dom"
 import {Link} from "react-router"
@@ -10,13 +12,12 @@ import Col from "antd/lib/col"
 import Input from "antd/lib/input"
 import Button from "antd/lib/button"
 import Table from "antd/lib/table"
-const InputGroup = Input.Group;
-const ButtonGrup = Button.Group;
-
 import * as Actions from "../../actions/product.js"
-import Immutable from "immutable"
-import $ from "jquery"
 import {tools} from "../../utils"
+const InputGroup = Input.Group
+const ButtonGrup = Button.Group
+
+
 
 /**
  * 产品状态
@@ -83,7 +84,7 @@ class ProductList extends React.Component {
                             <div>
                                 <Icon
                                     type={iconMap["state_" + text].type}
-                                    style={{ "color": iconMap["state_" + text].color}}/>
+                                    style={{ "color": iconMap["state_" + text].color }}/>
                                 <span>{stateEnumCn["enum_" + text]}</span>
                             </div>
                         );
