@@ -1,8 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { Provider } from "react-redux"
-import {RouterContext, Router, Route, IndexRoute, browserHistory,withRouter } from "react-router"
-// import { syncHistoryWithStore } from "react-router-redux"
+import {RouterContext, Router, Route, IndexRoute, hashHistory, withRouter } from "react-router"
 
 import DevTools from "../devTools"
 
@@ -11,15 +10,14 @@ import "./assets/style/antd/antd.less"
 import configureStore from "./store"
 
 import {
-  Layout, 
-  Home, 
+  Layout,
+  Home,
   ProductList,
   ProductDetail,
   ProductEdit} from "./views"
 
 const store = configureStore();
 
-// const history = syncHistoryWithStore(browserHistory, store);
 
 class Root extends React.Component {
   constructor(props) {
@@ -30,7 +28,7 @@ class Root extends React.Component {
       <Provider store={store}>
         <div>
           <Router
-            history={browserHistory}
+            history={hashHistory}
             onUpdate={() => { window.scrollTo(0, 0) } }
             render={(props) => <RouterContext {...props}/>}>
             <Route path="/" component={Layout}>
@@ -43,7 +41,7 @@ class Root extends React.Component {
               </Route>
             </Route>
           </Router>
-        
+
         </div>
       </Provider>
     )

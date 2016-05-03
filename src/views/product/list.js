@@ -33,6 +33,7 @@ const stateEnumCn = {
 }
 
 
+
 class ProductList extends React.Component {
     constructor(props) {
         super(props);
@@ -52,7 +53,7 @@ class ProductList extends React.Component {
                     dataIndex: "name",
                     key: "name",
                     render: (text, r) => {
-                        return (<Link to="/product/detail">{text}</Link>);
+                        return (<Link to="/product/detail" query={{"id":r.id}}>{text}</Link>);
                     }
                 }, {
                     title: "通用名",
@@ -101,7 +102,7 @@ class ProductList extends React.Component {
                 });
             },
 
-            pagination: $.extend(true, tools.config.pagination),
+            pagination: $.extend(true, {}, tools.config.pagination),
             rowSelection: {
                 onChange: (selectedRowKeys, selectedRows) => {
                     let {actions} = this.props;

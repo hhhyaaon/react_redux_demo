@@ -24,7 +24,7 @@ export function getProductList(conditions) {
     }
     console.warn("conditions", $.extend(true, {}, defConditions, conditions));
     return (dispatch) => {
-        tools.ajax({
+        return tools.ajax({
             url: "http://emkt.sfaessentials.com/aj/department/list",
             info: "获取产品列表",
             data: $.extend(true, {}, defConditions, conditions),
@@ -68,7 +68,7 @@ export function deletePdts(checkedPdts) {
             actionType: DELETE_PRODUCTS,
             success() {
                 //重新获取产品列表
-                getProductList();
+                getProductList()(dispatch);
             }
         })
     }
@@ -97,7 +97,7 @@ export function changePdtsState(checkedPdts, dstState) {
             actionType: DELETE_PRODUCTS,
             success() {
                 //重新获取产品列表
-                getProductList();
+                getProductList()(dispatch);
             }
         })
     }
@@ -126,11 +126,11 @@ export function setPdt(fields) {
  */
 export function savePdt(pdt) {
     let fields = {};
-    $.each(pdt,(key,val)=>{
+    $.each(pdt, (key, val) => {
         fields[key] = val.value
     });
-    console.log("fields",fields);
-    
+    console.log("fields", fields);
+
     return (dispatch) => {
         tools.ajax({
             //type:"post",

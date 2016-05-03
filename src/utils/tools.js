@@ -42,7 +42,6 @@ const tools = {
         if (this.loadingCount === 0) {
             ReactDOM.unmountComponentAtNode(document.getElementById("sy-loading"));
         }
-
     },
     /**
      * 删除所有loading框
@@ -131,7 +130,7 @@ $.extend(true, tools, {
      *   - array : 数组（默认）
      *   - bool ：布尔值
      *   - guid ：guid字符串
-     *   - normal ：原生对象
+     *   - object ：原生对象
      *   - html ：html字符串
      * isSuccessShow ：当操作成功时，是否显示success提示框，默认为false
      */
@@ -145,8 +144,7 @@ $.extend(true, tools, {
                 dataType: "json",
                 result: _ajax.resultEnum.object,
                 info: "",
-                isShowSuccess: false,
-                success: $.noop
+                isShowSuccess: false
             }, cfg);
 
             _cfg.beforeSend = function () { _beforeSend.apply(this, $.makeArray(arguments).concat(cfg)); }
@@ -154,7 +152,7 @@ $.extend(true, tools, {
             _cfg.error = function () { _onError.apply(this, $.makeArray(arguments).concat(cfg)); };
 
             //执行ajax
-            $.ajax(_cfg);
+            return $.ajax(_cfg);
 
         }
 
@@ -251,3 +249,4 @@ $.extend(true, tools, {
 })
 
 export default tools;
+
